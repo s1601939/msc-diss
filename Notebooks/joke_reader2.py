@@ -31,11 +31,24 @@ joke_text = load_jokes()
 
 
 for joke in joke_text:
+    max_sim = 0
+    min_sim = 0
+    max_words = ()
+    min_words = ()
     joke_words = joke.split()
-    pairs = list(itertools.permutations(joke_words,2))
+    pairs = list(itertools.combinations(joke_words,2))
     for (left_word,right_word) in pairs:
         try:
-            print("{0}-{1}: {2}".format(left_word,right_word,model.similarity(left_word, right_word)))
+            this_sim = model.similarity(left_word, right_word)
+            if this_sim < min_sim:
+                min_sim = this_sim
+                min_words = (left_word, right_word)
+            if this_sim > max_sim:
+                max_sim = this_sim
+                max_words = (left_word, right_word)
         except:
             print("one of these words is not in vocab: {0}, {1}".format(left_word,right_word))
 
+    print(joke)
+    print("min_sim {0}-{1}: {2}".format(min_words(0),min_words(1), min_sim))
+    print("max_sim {0}-{1}: {2}".format(max_words(0),max_words(1), max_sim))
