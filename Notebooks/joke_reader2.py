@@ -10,6 +10,7 @@
 import gensim
 import os
 import string
+import itertools
 
 def load_jokes(fname='jokes.txt'):
     with open(fname) as f:
@@ -31,10 +32,10 @@ joke_text = load_jokes()
 
 for joke in joke_text:
     joke_words = joke.split()
-    for left_word in joke_words[0:-1]:
-        for right_word in joke_words[1:]:
-            try:
-                print("{0}-{1}: {2}".format(left_word,right_word,model.similarity(left_word, right_word)))
-            except:
-                print("one of these words is not in vocab: {0}, {1}".format(left_word,right_word))
+    pairs = list(itertools.permutations(joke_words,2))
+    with (left_word,right_word) in pairs:
+        try:
+            print("{0}-{1}: {2}".format(left_word,right_word,model.similarity(left_word, right_word)))
+        except:
+            print("one of these words is not in vocab: {0}, {1}".format(left_word,right_word))
 
