@@ -31,5 +31,8 @@ for joke in joke_text:
     joke_words = joke.split()
     for left_word in joke_words[0:-1]:
         for right_word in joke_words[1:]:
-            print("{0}-{1}: {2}".format(left_word,right_word,model.similarity(left_word, right_word)))
+            try:
+                print("{0}-{1}: {2}".format(left_word,right_word,model.similarity(left_word, right_word)))
+            except:
+                print("one of these words is not in vocab: {0}, {1}".format(left_word,right_word))
 
