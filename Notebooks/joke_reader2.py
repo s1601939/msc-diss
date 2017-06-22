@@ -21,7 +21,7 @@ def load_jokes(fname='jokes.txt'):
 
 
 print("Load the model")
-model = gensim.models.KeyedVectors.load_word2vec_format(os.path.join(os.path.dirname(__file__), 'GoogleNews-vectors-negative300.bin'), binary=True)
+model = gensim.models.KeyedVectors.load_word2vec_format(os.path.join(os.path.dirname(__file__), '../data/GoogleNews-vectors-negative300.bin'), binary=True)
 
 print("Load the jokes")
 joke_text = load_jokes()
