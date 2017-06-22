@@ -9,6 +9,7 @@
 
 import gensim
 import os
+import string
 
 def load_jokes(fname='jokes.txt'):
     with open(fname) as f:
@@ -16,6 +17,7 @@ def load_jokes(fname='jokes.txt'):
 
     # you may also want to remove whitespace characters like `\n` at the end of each line
     the_jokes = [x.strip() for x in the_jokes] 
+    the_jokes = [''.join(c for c in s if c not in string.punctuation) for s in the_jokes]
     return the_jokes
 
 
