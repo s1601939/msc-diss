@@ -33,7 +33,7 @@ joke_text = load_jokes()
 for joke in joke_text:
     joke_words = joke.split()
     pairs = list(itertools.permutations(joke_words,2))
-    with (left_word,right_word) in pairs:
+    for (left_word,right_word) in pairs:
         try:
             print("{0}-{1}: {2}".format(left_word,right_word,model.similarity(left_word, right_word)))
         except:
