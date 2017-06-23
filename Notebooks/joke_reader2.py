@@ -38,7 +38,7 @@ def get_similarities(joke):
     for (left_word,right_word) in pairs:
         if not (left_word == right_word):
             try:
-                this_sim = model.KeyedVectors.similarity(left_word, right_word)
+                this_sim = model.similarity(left_word, right_word)
                 if this_sim < min_sim:
                     min_sim = this_sim
                     min_words = (left_word, right_word)
@@ -51,8 +51,7 @@ def get_similarities(joke):
     return [min_sim, min_words, max_sim, max_words]
 
 print("Load the model")
-#model = gensim.models.KeyedVectors.load_word2vec_format(os.path.join(os.path.dirname(__file__), '../data/GoogleNews-vectors-negative300.bin'), binary=True)
-model = gensim.models.load_word2vec_format(os.path.join(os.path.dirname(__file__), '../data/GoogleNews-vectors-negative300.bin'), binary=True)
+model = gensim.models.KeyedVectors.load_word2vec_format(os.path.join(os.path.dirname(__file__), '../data/GoogleNews-vectors-negative300.bin'), binary=True)
 
 print("Load the jokes")
 joke_text = load_jokes()
