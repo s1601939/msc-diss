@@ -25,8 +25,30 @@ def load_jokes(fname='jokes.txt'):
     return the_jokes
 
 def load_stopwords(fname='stopwords.txt'):
-    stopwords = ['a', 'to']
+    stopwords = ['a', 'to', 'and']
     return stopwords
+
+def get_similarities(joke):
+    max_sim = 0
+    min_sim = 0
+    max_words = ()
+    min_words = ()
+    joke_words = [word for word in joke.split() if word.lower() not in stopwords]
+    pairs = list(itertools.combinations(joke_words,2))
+    for (left_word,right_word) in pairs:
+        if not (left_word == right_word):
+            try:
+                this_sim = model.similarity(left_word, right_word)
+                if this_sim < min_sim:
+                    min_sim = this_sim
+                    min_words = (left_word, right_word)
+                if this_sim > max_sim:
+                    max_sim = this_sim
+                    max_words = (left_word, right_word)
+            except:
+                # use this to build a stopword list
+                print("one of these words is not in vocab: {0}, {1}".format(left_word,right_word))
+    return [min_sim, min_words, max_sim, max_words]
 
 print("Load the model")
 model = gensim.models.KeyedVectors.load_word2vec_format(os.path.join(os.path.dirname(__file__), '../data/GoogleNews-vectors-negative300.bin'), binary=True)
@@ -38,25 +60,5 @@ print("Load the stop/oov words")
 stopwords = load_stopwords()
 
 for joke in joke_text:
-    max_sim = 0
-    min_sim = 0
-    max_words = ()
-    min_words = ()
-    joke_words = [word for word in joke.split() if word.lower() not in stopwords]
-    pairs = list(itertools.combinations(joke_words,2))
-    for (left_word,right_word) in pairs:
-        try:
-            this_sim = model.similarity(left_word, right_word)
-            if this_sim < min_sim:
-                min_sim = this_sim
-                min_words = (left_word, right_word)
-            if this_sim > max_sim:
-                max_sim = this_sim
-                max_words = (left_word, right_word)
-        except:
-            # use this to build a stopword list
-            print("one of these words is not in vocab: {0}, {1}".format(left_word,right_word))
-
-    print(joke)
-    print("min_sim {0}-{1}: {2}".format(min_words[0],min_words[1], min_sim))
-    print("max_sim {0}-{1}: {2}".format(max_words[0],max_words[1], max_sim))
+    mns, mnw, mxs, mxw = get_similarities(joke)
+    print (mns, mnw, mxs, mxw)
