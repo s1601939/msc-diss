@@ -29,8 +29,8 @@ def load_stopwords(fname='stopwords.txt'):
     return stopwords
 
 def get_similarities(joke):
-    max_sim = 0
-    min_sim = 0
+    max_sim = -1
+    min_sim = 1
     max_words = ()
     min_words = ()
     joke_words = [word for word in joke.split() if word.lower() not in stopwords]
