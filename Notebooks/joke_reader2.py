@@ -18,10 +18,15 @@ def load_jokes(fname='jokes.txt'):
 
     # you may also want to remove whitespace characters like `\n` at the end of each line
     the_jokes = [x.strip() for x in the_jokes] 
-    the_jokes = [''.join(c for c in s if c not in string.punctuation) for s in the_jokes]
+
+    # deal with punctuation except apostrophes
+    punct = ''.join(c for c in string.punctuation if c not in "'")
+    the_jokes = [''.join(c for c in s if c not in punct) for s in the_jokes]
     return the_jokes
 
-
+def load_stopwords(fname='stopwords.txt'):
+    stopwords = ['a', 'to']
+    return stopwords
 
 print("Load the model")
 model = gensim.models.KeyedVectors.load_word2vec_format(os.path.join(os.path.dirname(__file__), '../data/GoogleNews-vectors-negative300.bin'), binary=True)
@@ -29,13 +34,15 @@ model = gensim.models.KeyedVectors.load_word2vec_format(os.path.join(os.path.dir
 print("Load the jokes")
 joke_text = load_jokes()
 
+print("Load the stop/oov words")
+stopwords = load_stopwords()
 
 for joke in joke_text:
     max_sim = 0
     min_sim = 0
     max_words = ()
     min_words = ()
-    joke_words = joke.split()
+    joke_words = [word for word in joke.split() if word.lower() not in stopwords]
     pairs = list(itertools.combinations(joke_words,2))
     for (left_word,right_word) in pairs:
         try:
@@ -47,8 +54,9 @@ for joke in joke_text:
                 max_sim = this_sim
                 max_words = (left_word, right_word)
         except:
+            # use this to build a stopword list
             print("one of these words is not in vocab: {0}, {1}".format(left_word,right_word))
 
     print(joke)
-    print("min_sim {0}-{1}: {2}".format(min_words(0),min_words(1), min_sim))
-    print("max_sim {0}-{1}: {2}".format(max_words(0),max_words(1), max_sim))
+    print("min_sim {0}-{1}: {2}".format(min_words[0],min_words[1], min_sim))
+    print("max_sim {0}-{1}: {2}".format(max_words[0],max_words[1], max_sim))
