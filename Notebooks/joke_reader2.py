@@ -25,7 +25,7 @@ def load_jokes(fname='jokes.txt'):
     return the_jokes
 
 def load_stopwords(fname='stopwords.txt'):
-    stopwords = ['a', 'to', 'and']
+    stopwords = ['a', 'to', 'and', 'of']
     return stopwords
 
 def get_similarities(joke):
@@ -61,4 +61,5 @@ stopwords = load_stopwords()
 
 for joke in joke_text:
     mns, mnw, mxs, mxw = get_similarities(joke)
+    print(joke)
     print (mns, mnw, mxs, mxw)
