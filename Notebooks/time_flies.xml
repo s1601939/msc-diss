@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="CoreNLP-to-HTML.xsl" type="text/xsl"?>
+<root>
+  <document>
+    <sentences>
+      <sentence id="1">
+        <tokens>
+          <token id="1">
+            <word>Time</word>
+            <lemma>Time</lemma>
+            <CharacterOffsetBegin>0</CharacterOffsetBegin>
+            <CharacterOffsetEnd>4</CharacterOffsetEnd>
+            <POS>NNP</POS>
+            <NER>O</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+          <token id="2">
+            <word>flies</word>
+            <lemma>fly</lemma>
+            <CharacterOffsetBegin>5</CharacterOffsetBegin>
+            <CharacterOffsetEnd>10</CharacterOffsetEnd>
+            <POS>VBZ</POS>
+            <NER>O</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+          <token id="3">
+            <word>like</word>
+            <lemma>like</lemma>
+            <CharacterOffsetBegin>11</CharacterOffsetBegin>
+            <CharacterOffsetEnd>15</CharacterOffsetEnd>
+            <POS>IN</POS>
+            <NER>O</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+          <token id="4">
+            <word>an</word>
+            <lemma>a</lemma>
+            <CharacterOffsetBegin>16</CharacterOffsetBegin>
+            <CharacterOffsetEnd>18</CharacterOffsetEnd>
+            <POS>DT</POS>
+            <NER>O</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+          <token id="5">
+            <word>arrow</word>
+            <lemma>arrow</lemma>
+            <CharacterOffsetBegin>19</CharacterOffsetBegin>
+            <CharacterOffsetEnd>24</CharacterOffsetEnd>
+            <POS>NN</POS>
+            <NER>O</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+          <token id="6">
+            <word>,</word>
+            <lemma>,</lemma>
+            <CharacterOffsetBegin>24</CharacterOffsetBegin>
+            <CharacterOffsetEnd>25</CharacterOffsetEnd>
+            <POS>,</POS>
+            <NER>O</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+          <token id="7">
+            <word>fruit</word>
+            <lemma>fruit</lemma>
+            <CharacterOffsetBegin>26</CharacterOffsetBegin>
+            <CharacterOffsetEnd>31</CharacterOffsetEnd>
+            <POS>NN</POS>
+            <NER>O</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+          <token id="8">
+            <word>flies</word>
+            <lemma>fly</lemma>
+            <CharacterOffsetBegin>32</CharacterOffsetBegin>
+            <CharacterOffsetEnd>37</CharacterOffsetEnd>
+            <POS>NNS</POS>
+            <NER>O</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+          <token id="9">
+            <word>like</word>
+            <lemma>like</lemma>
+            <CharacterOffsetBegin>38</CharacterOffsetBegin>
+            <CharacterOffsetEnd>42</CharacterOffsetEnd>
+            <POS>IN</POS>
+            <NER>O</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+          <token id="10">
+            <word>banana</word>
+            <lemma>banana</lemma>
+            <CharacterOffsetBegin>43</CharacterOffsetBegin>
+            <CharacterOffsetEnd>49</CharacterOffsetEnd>
+            <POS>NN</POS>
+            <NER>O</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+        </tokens>
+        <parse>(ROOT (S (NP (NNP Time)) (VP (VBZ flies) (PP (IN like) (NP (NP (DT an) (NN arrow)) (, ,) (NP (NP (NN fruit) (NNS flies)) (PP (IN like) (NP (NN banana))))))))) </parse>
+        <dependencies type="basic-dependencies">
+          <dep type="root">
+            <governor idx="0">ROOT</governor>
+            <dependent idx="2">flies</dependent>
+          </dep>
+          <dep type="nsubj">
+            <governor idx="2">flies</governor>
+            <dependent idx="1">Time</dependent>
+          </dep>
+          <dep type="case">
+            <governor idx="5">arrow</governor>
+            <dependent idx="3">like</dependent>
+          </dep>
+          <dep type="det">
+            <governor idx="5">arrow</governor>
+            <dependent idx="4">an</dependent>
+          </dep>
+          <dep type="nmod">
+            <governor idx="2">flies</governor>
+            <dependent idx="5">arrow</dependent>
+          </dep>
+          <dep type="compound">
+            <governor idx="8">flies</governor>
+            <dependent idx="7">fruit</dependent>
+          </dep>
+          <dep type="appos">
+            <governor idx="5">arrow</governor>
+            <dependent idx="8">flies</dependent>
+          </dep>
+          <dep type="case">
+            <governor idx="10">banana</governor>
+            <dependent idx="9">like</dependent>
+          </dep>
+          <dep type="nmod">
+            <governor idx="8">flies</governor>
+            <dependent idx="10">banana</dependent>
+          </dep>
+        </dependencies>
+        <dependencies type="collapsed-dependencies">
+          <dep type="root">
+            <governor idx="0">ROOT</governor>
+            <dependent idx="2">flies</dependent>
+          </dep>
+          <dep type="nsubj">
+            <governor idx="2">flies</governor>
+            <dependent idx="1">Time</dependent>
+          </dep>
+          <dep type="case">
+            <governor idx="5">arrow</governor>
+            <dependent idx="3">like</dependent>
+          </dep>
+          <dep type="det">
+            <governor idx="5">arrow</governor>
+            <dependent idx="4">an</dependent>
+          </dep>
+          <dep type="nmod:like">
+            <governor idx="2">flies</governor>
+            <dependent idx="5">arrow</dependent>
+          </dep>
+          <dep type="compound">
+            <governor idx="8">flies</governor>
+            <dependent idx="7">fruit</dependent>
+          </dep>
+          <dep type="appos">
+            <governor idx="5">arrow</governor>
+            <dependent idx="8">flies</dependent>
+          </dep>
+          <dep type="case">
+            <governor idx="10">banana</governor>
+            <dependent idx="9">like</dependent>
+          </dep>
+          <dep type="nmod:like">
+            <governor idx="8">flies</governor>
+            <dependent idx="10">banana</dependent>
+          </dep>
+        </dependencies>
+        <dependencies type="collapsed-ccprocessed-dependencies">
+          <dep type="root">
+            <governor idx="0">ROOT</governor>
+            <dependent idx="2">flies</dependent>
+          </dep>
+          <dep type="nsubj">
+            <governor idx="2">flies</governor>
+            <dependent idx="1">Time</dependent>
+          </dep>
+          <dep type="case">
+            <governor idx="5">arrow</governor>
+            <dependent idx="3">like</dependent>
+          </dep>
+          <dep type="det">
+            <governor idx="5">arrow</governor>
+            <dependent idx="4">an</dependent>
+          </dep>
+          <dep type="nmod:like">
+            <governor idx="2">flies</governor>
+            <dependent idx="5">arrow</dependent>
+          </dep>
+          <dep type="compound">
+            <governor idx="8">flies</governor>
+            <dependent idx="7">fruit</dependent>
+          </dep>
+          <dep type="appos">
+            <governor idx="5">arrow</governor>
+            <dependent idx="8">flies</dependent>
+          </dep>
+          <dep type="case">
+            <governor idx="10">banana</governor>
+            <dependent idx="9">like</dependent>
+          </dep>
+          <dep type="nmod:like">
+            <governor idx="8">flies</governor>
+            <dependent idx="10">banana</dependent>
+          </dep>
+        </dependencies>
+      </sentence>
+    </sentences>
+  </document>
+</root>

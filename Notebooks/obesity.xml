@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="CoreNLP-to-HTML.xsl" type="text/xsl"?>
+<root>
+  <document>
+    <sentences>
+      <sentence id="1">
+        <tokens>
+          <token id="1">
+            <word>Obesity</word>
+            <lemma>obesity</lemma>
+            <CharacterOffsetBegin>0</CharacterOffsetBegin>
+            <CharacterOffsetEnd>7</CharacterOffsetEnd>
+            <POS>NN</POS>
+            <NER>O</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+          <token id="2">
+            <word>should</word>
+            <lemma>should</lemma>
+            <CharacterOffsetBegin>8</CharacterOffsetBegin>
+            <CharacterOffsetEnd>14</CharacterOffsetEnd>
+            <POS>MD</POS>
+            <NER>O</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+          <token id="3">
+            <word>not</word>
+            <lemma>not</lemma>
+            <CharacterOffsetBegin>15</CharacterOffsetBegin>
+            <CharacterOffsetEnd>18</CharacterOffsetEnd>
+            <POS>RB</POS>
+            <NER>O</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+          <token id="4">
+            <word>be</word>
+            <lemma>be</lemma>
+            <CharacterOffsetBegin>19</CharacterOffsetBegin>
+            <CharacterOffsetEnd>21</CharacterOffsetEnd>
+            <POS>VB</POS>
+            <NER>O</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+          <token id="5">
+            <word>taken</word>
+            <lemma>take</lemma>
+            <CharacterOffsetBegin>22</CharacterOffsetBegin>
+            <CharacterOffsetEnd>27</CharacterOffsetEnd>
+            <POS>VBN</POS>
+            <NER>O</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+          <token id="6">
+            <word>lightly</word>
+            <lemma>lightly</lemma>
+            <CharacterOffsetBegin>28</CharacterOffsetBegin>
+            <CharacterOffsetEnd>35</CharacterOffsetEnd>
+            <POS>RB</POS>
+            <NER>O</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+        </tokens>
+        <parse>(ROOT (S (NP (NN Obesity)) (VP (MD should) (RB not) (VP (VB be) (VP (VBN taken) (ADVP (RB lightly))))))) </parse>
+        <dependencies type="basic-dependencies">
+          <dep type="root">
+            <governor idx="0">ROOT</governor>
+            <dependent idx="5">taken</dependent>
+          </dep>
+          <dep type="nsubjpass">
+            <governor idx="5">taken</governor>
+            <dependent idx="1">Obesity</dependent>
+          </dep>
+          <dep type="aux">
+            <governor idx="5">taken</governor>
+            <dependent idx="2">should</dependent>
+          </dep>
+          <dep type="neg">
+            <governor idx="5">taken</governor>
+            <dependent idx="3">not</dependent>
+          </dep>
+          <dep type="auxpass">
+            <governor idx="5">taken</governor>
+            <dependent idx="4">be</dependent>
+          </dep>
+          <dep type="advmod">
+            <governor idx="5">taken</governor>
+            <dependent idx="6">lightly</dependent>
+          </dep>
+        </dependencies>
+        <dependencies type="collapsed-dependencies">
+          <dep type="root">
+            <governor idx="0">ROOT</governor>
+            <dependent idx="5">taken</dependent>
+          </dep>
+          <dep type="nsubjpass">
+            <governor idx="5">taken</governor>
+            <dependent idx="1">Obesity</dependent>
+          </dep>
+          <dep type="aux">
+            <governor idx="5">taken</governor>
+            <dependent idx="2">should</dependent>
+          </dep>
+          <dep type="neg">
+            <governor idx="5">taken</governor>
+            <dependent idx="3">not</dependent>
+          </dep>
+          <dep type="auxpass">
+            <governor idx="5">taken</governor>
+            <dependent idx="4">be</dependent>
+          </dep>
+          <dep type="advmod">
+            <governor idx="5">taken</governor>
+            <dependent idx="6">lightly</dependent>
+          </dep>
+        </dependencies>
+        <dependencies type="collapsed-ccprocessed-dependencies">
+          <dep type="root">
+            <governor idx="0">ROOT</governor>
+            <dependent idx="5">taken</dependent>
+          </dep>
+          <dep type="nsubjpass">
+            <governor idx="5">taken</governor>
+            <dependent idx="1">Obesity</dependent>
+          </dep>
+          <dep type="aux">
+            <governor idx="5">taken</governor>
+            <dependent idx="2">should</dependent>
+          </dep>
+          <dep type="neg">
+            <governor idx="5">taken</governor>
+            <dependent idx="3">not</dependent>
+          </dep>
+          <dep type="auxpass">
+            <governor idx="5">taken</governor>
+            <dependent idx="4">be</dependent>
+          </dep>
+          <dep type="advmod">
+            <governor idx="5">taken</governor>
+            <dependent idx="6">lightly</dependent>
+          </dep>
+        </dependencies>
+      </sentence>
+    </sentences>
+  </document>
+</root>
