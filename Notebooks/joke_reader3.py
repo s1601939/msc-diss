@@ -29,6 +29,16 @@ def load_stopwords(fname='stopwords.txt'):
     stopwords = ['a','to','and','of', 'are', 'she', 'i', 'you', 'is', "i'm", "i'd", 'but', 'so', 'on', 'the', 'me', 'my', 'into', 'be']
     return stopwords
 
+def load_stoppos(fname='stoppos.txt'):
+    allpos = ['ADJ', 'ADP', 'ADV', 'AUX', 'CONJ', 'DET', 'INTJ', 'NOUN', 'NUM', 
+            'PART PRON', 'PROPN', 'PUNCT', 'SCONJ', 'SYM', 'VERB', 'X', 'NORP', 
+            'FACILITY', 'ORG', 'GPE', 'LOC', 'PRODUCT', 'EVENT', 'WORK_OF_ART', 'LANGUAGE']
+    keeppos = ['ADJ', 'ADV', 'INTJ', 'NOUN',  
+            'PROPN', 'SCONJ', 'SYM', 'VERB', 'X', 'NORP', 
+            'FACILITY', 'ORG', 'GPE', 'LOC', 'PRODUCT', 'EVENT', 'WORK_OF_ART', 'LANGUAGE']
+    stoppos = allpos - stoppos
+    return stoppos
+
 def get_similarities(this_model, joke):
     max_sim = -1
     min_sim = 1
@@ -50,6 +60,13 @@ def get_similarities(this_model, joke):
                 # use this to build a stopword list
                 print("one of these words is not in vocab: {0}, {1}".format(left_word,right_word))
     return [min_sim, min_words, max_sim, max_words]
+
+def get_polysems(this_model, this_word):
+    '''
+    This should return set of 'word|POS' for the lower case version of word
+    '''
+    polysems =[key for key, value in this_model.items() if key.lower().startswith(this_word+'|')]
+    return polysems
 
 def transform_texts(texts):
     # Load the annotation models
