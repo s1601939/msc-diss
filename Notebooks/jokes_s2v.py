@@ -16,21 +16,21 @@ import sense2vec
 
 model_choice = 's2v' #['w2v_hierarchical_softmax', 'w2v_negative_sampling', 's2v']
 
-class Model(object):
-    def __init__(self,name):
-        self.name = name
+class Model:
+    def __init__(self, model_type):
+        self.model_type = model_type
 
-    def get_name(self):
-        return self.name
+    def get_type(self):
+        return self.model_type
 
     def similarity(self):
         raise NotImplementedError
 
 
 class Sense2VecModel(Model):
-    def __init__(self):
+    def __init__(self, model_type='s2v'):
+        Model.__init__(self, model_type)
         self.model = sense2vec.load()
-        self.name = "s2v"
 
     def similarity(self, word1, word2):
         f1,v1 = self.model[word1]
@@ -38,17 +38,18 @@ class Sense2VecModel(Model):
         return model.data.similarity(v1,v2)
 
 
-class Word2VecModel(Model,type='hierarchical'):
-    def __init__(self):
-        if type == 'hierarchical':
+class Word2VecModel(Model):
+    def __init__(self, name, model_type='hierarchical'):
+        Model.__init__(self, model_type)
+        if self.type == 'w2v_hierarchical_softmax':
             self.model =  gensim.models.Word2Vec(brown.sents()+movie_reviews.sents()+treebank.sents()+webtext.sents()+gutenberg.sents(), hs=1, negative=0)
-            self.name = "w2v_hierarchical_softmax"
         else:
             self.model = gensim.models.Word2Vec(brown.sents()+movie_reviews.sents()+treebank.sents()+webtext.sents()+gutenberg.sents())
-            self.name = "w2v_negative_sampling"
 
     def similarity(self, word1, word2):
         return model.similarity(word1, word2)
+
+
 
 def load_jokes(fname='jokes.txt'):
     with open(fname) as f:
@@ -152,13 +153,13 @@ print("Load the models")
 #model = gensim.models.KeyedVectors.load_word2vec_format(os.path.join(os.path.dirname(__file__), '../data/GoogleNews-vectors-negative300.bin'), binary=True)
 if model_choice == 'w2v_hierarchical_softmax':
     print(">>Hierarchical Softmax version")
-    model = Word2VecModel('hierarchical')
+    model = Word2VecModel(model_choice)
 elif model_choice == 'w2v_negative_sampling':
     print(">>Negative sampling version")
-    model = Word2VecModel('negative')
+    model = Word2VecModel(model_choice)
 elif model_choice == 's2v':
     print(">>sense2vec - reddit hivemind corpus")
-    model_s2v = Sense2VecModel()
+    model_s2v = Sense2VecModel(model_choice)
 else:
     raise NotImplementedError
 
