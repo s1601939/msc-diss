@@ -14,6 +14,8 @@ import itertools
 from nltk.corpus import brown, movie_reviews, treebank, webtext, gutenberg
 import sense2vec
 
+model_choice = 's2v' #['w2v_hierarchical_softmax', 'w2v_negative_sampling', 's2v']
+
 class Model(object):
     def __init__(self,name):
         self.name = name
@@ -38,10 +40,10 @@ class Sense2VecModel(Model):
 
 class Word2VecModel(Model,type='hierarchical'):
     def __init__(self):
-        if type == 'hierarchical'
+        if type == 'hierarchical':
             self.model =  gensim.models.Word2Vec(brown.sents()+movie_reviews.sents()+treebank.sents()+webtext.sents()+gutenberg.sents(), hs=1, negative=0)
             self.name = "w2v_hierarchical_softmax"
-        else
+        else:
             self.model = gensim.models.Word2Vec(brown.sents()+movie_reviews.sents()+treebank.sents()+webtext.sents()+gutenberg.sents())
             self.name = "w2v_negative_sampling"
 
