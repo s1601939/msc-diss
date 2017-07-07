@@ -156,7 +156,7 @@ if model_choice == 'w2v_hierarchical_softmax':
 elif model_choice == 'w2v_negative_sampling':
     print(">>Negative sampling version")
     model = Word2VecModel('negative')
-elif model_choice = 's2v':
+elif model_choice == 's2v':
     print(">>sense2vec - reddit hivemind corpus")
     model_s2v = Sense2VecModel()
 else:
