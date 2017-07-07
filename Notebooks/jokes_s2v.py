@@ -153,10 +153,10 @@ print("Load the models")
 if model_choice == 'w2v_hierarchical_softmax':
     print(">>Hierarchical Softmax version")
     model = Word2VecModel('hierarchical')
-else if model_choice == 'w2v_negative_sampling':
+elif model_choice == 'w2v_negative_sampling':
     print(">>Negative sampling version")
     model = Word2VecModel('negative')
-else if model_choice = 's2v':
+elif model_choice = 's2v':
     print(">>sense2vec - reddit hivemind corpus")
     model_s2v = Sense2VecModel()
 else:
