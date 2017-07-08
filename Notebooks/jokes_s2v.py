@@ -13,6 +13,7 @@ import string
 import itertools
 from nltk.corpus import brown, movie_reviews, treebank, webtext, gutenberg
 import sense2vec
+from operator import itemgetter
 
 model_choice = 's2v' #['w2v_hierarchical_softmax', 'w2v_negative_sampling', 's2v']
 
@@ -26,6 +27,9 @@ class Model:
     def similarity(self):
         raise NotImplementedError
 
+    def format_word(self):
+        raise NotImplementedError
+
 
 class Sense2VecModel(Model):
     def __init__(self, model_type='s2v'):
@@ -33,9 +37,25 @@ class Sense2VecModel(Model):
         self.model = sense2vec.load()
 
     def similarity(self, word1, word2):
-        f1,v1 = self.model[word1]
-        f2,v2 = self.model[word2]
+        f1,v1 = self.model[format_word(word1)]
+        f2,v2 = self.model[format_word(word2)]
         return model.data.similarity(v1,v2)
+
+    def format_word(self, word):
+        # if no POS tag is present, find the most freqent version of the word.
+        this_word = word.split('|')
+        if len(this_word) == 1:
+            word = most_frequent_POS(this_word)
+        return word
+
+    def most_frequent_POS(self, untagged_word):
+        # get all the known tags for untagged word
+        # select highest frequency version
+        # return the tagged version of the untagged_word
+        freq_list = sorted([(key,value[0]) for key, value in self.model.items() if key.lower().startswith(untagged_word+'|')], key=itemgetter(1), reverse=True)
+
+        return freq_list[0][0]
+
 
 
 class Word2VecModel(Model):
@@ -47,7 +67,11 @@ class Word2VecModel(Model):
             self.model = gensim.models.Word2Vec(brown.sents()+movie_reviews.sents()+treebank.sents()+webtext.sents()+gutenberg.sents())
 
     def similarity(self, word1, word2):
-        return model.similarity(word1, word2)
+        return model.similarity(format_word(word1), format_word(word2))
+
+    def format_word(self, word):
+        # if a POS tag is present, ignore it. force the word to lowercase
+        return word
 
 
 
