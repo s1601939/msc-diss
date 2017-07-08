@@ -37,8 +37,10 @@ class Sense2VecModel(Model):
         self.model = sense2vec.load()
 
     def similarity(self, word1, word2):
-        f1,v1 = self.model[format_word(word1)]
-        f2,v2 = self.model[format_word(word2)]
+        print(word1)
+        f1,v1 = self.model[self.format_word(word1)]
+        print(word2)
+        f2,v2 = self.model[self.format_word(word2)]
         return model.data.similarity(v1,v2)
 
     def format_word(self, word):
@@ -46,6 +48,7 @@ class Sense2VecModel(Model):
         this_word = word.split('|')
         if len(this_word) == 1:
             word = most_frequent_POS(this_word)
+        print(word)
         return word
 
     def most_frequent_POS(self, untagged_word):
