@@ -51,7 +51,7 @@ def parallelize(func, iterator, n_jobs, extra):
 def iter_comments(loc):
     with bz2.BZ2File(loc) as file_:
         for i, line in enumerate(file_):
-            yield ujson.loads(line)['body']
+            yield json.loads(line)['body']
 
 
 pre_format_re = re.compile(r'^[\`\*\~]')
