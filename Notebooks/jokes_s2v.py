@@ -47,7 +47,7 @@ class Sense2VecModel(Model):
         # if no POS tag is present, find the most freqent version of the word.
         this_word = word.split('|')
         if len(this_word) == 1:
-            word = most_frequent_POS(this_word)
+            word = self.most_frequent_POS(this_word[0])
         print(word)
         return word
 
