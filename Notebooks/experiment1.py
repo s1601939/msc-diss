@@ -10,6 +10,7 @@ import sense2vec
 from operator import itemgetter
 from joke_model import JokeModel
 from language_models import Sense2VecModel, Word2VecModel
+from nltk.corpus import stopwords
 
 model_choice = 's2v' #['w2v', 's2v']
 # for language model operations we can "safely" assume that words are passed as
@@ -19,14 +20,14 @@ model_choice = 's2v' #['w2v', 's2v']
 
 
 def load_stopwords(fname='stopwords.txt'):
-    stopwords =  ['a','to','of', 'so', 'on', 'the', 'into']
-    stopwords += ['i', 'me', 'my', 'you', 'us', 'we', 'them', 'she', 'her', 'he', 'him']
-    stopwords += ['and', 'or', 'but']
-    stopwords += ['had', 'have', "'ve"]
-    stopwords += ['is', 'are', 'am', "'m", 'be']
-    stopwords += ["'s", "'d"]
-
-    return stopwords
+    # stopwords =  ['a','to','of', 'so', 'on', 'the', 'into']
+    # stopwords += ['i', 'me', 'my', 'you', 'us', 'we', 'them', 'she', 'her', 'he', 'him']
+    # stopwords += ['and', 'or', 'but']
+    # stopwords += ['had', 'have', "'ve"]
+    # stopwords += ['is', 'are', 'am', "'m", 'be']
+    # stopwords += ["'s", "'d"]
+    stopWords = set(stopwords.words('english'))
+    return stopWords
 
 def load_stoptags(fname='stoppos.txt'):
     allpos = ['ADJ', 'ADP', 'ADV', 'AUX', 'CONJ', 'DET', 'INTJ', 'NOUN', 'NUM', 
@@ -44,8 +45,8 @@ def get_similarities(this_model, joke):
     max_words = ()
     min_words = ()
     # joke_words = [word for word in joke.split() if word.split('|')[0].lower() not in stopwords]
-    joke_words = [w for w in joke.split() if w.split('|')[0] not in stopwords]
-    joke_words = [w for w in joke_words if w.split('|')[1] not in stoptags]
+    joke_words = [w for w in joke.split() if w.split('|')[0].lower() not in stop_words]
+    joke_words = [w for w in joke_words if w.split('|')[1] not in stop_tags]
     pairs = list(itertools.combinations(joke_words,2))
     for (left_word,right_word) in pairs:
         if not (left_word == right_word):
@@ -64,7 +65,6 @@ def get_similarities(this_model, joke):
 
 
 print("Load the models")
-#model = gensim.models.KeyedVectors.load_word2vec_format(os.path.join(os.path.dirname(__file__), '../data/GoogleNews-vectors-negative300.bin'), binary=True)
 if model_choice == 'w2v':
     print(">>word2vec - extended corpora")
     model = Word2VecModel(model_choice)
@@ -78,8 +78,8 @@ print("Load the jokes")
 jokes = JokeModel('jokes.txt')
 
 print("Load stopwords and stoptags")
-stopwords = load_stopwords()
-stoptags = load_stoptags()
+stop_words = load_stopwords()
+stop_tags = load_stoptags()
 
 for joke in jokes.tagged_jokes():
     mns, mnw, mxs, mxw = get_similarities(model, joke)

@@ -39,8 +39,10 @@ LABELS = {
 }
 
 class JokeModel():
-    def __init__(self, joke_file = 'jokes.txt'):
+    def __init__(self, joke_file = 'jokes.txt', noun_chunks = True, named_entities = True):
         self.joke_file = joke_file
+        self.noun_chunks = noun_chunks
+        self.named_entities = named_entities
         self.nlp = spacy.en.English()
 
     def raw_jokes(self):
@@ -56,15 +58,19 @@ class JokeModel():
 
     def transform_doc(self, doc):
         # label named entities
-        for ent in doc.ents:
-            ent.merge(ent.root.tag_, ent.text, LABELS[ent.label_])
+        if self.named_entities:
+            for ent in doc.ents:
+                ent.merge(ent.root.tag_, ent.text, LABELS[ent.label_])
+
         # compound noun phrases
-        for np in list(doc.noun_chunks):
-            while len(np) > 1 and np[0].dep_ not in ('advmod', 'amod', 'compound'):
-                np = np[1:]
-            np.merge(np.root.tag_, np.text, np.root.ent_type_)
-        strings = []
+        if self.noun_chunks:
+            for np in list(doc.noun_chunks):
+                while len(np) > 1 and np[0].dep_ not in ('advmod', 'amod', 'compound'):
+                    np = np[1:]
+                np.merge(np.root.tag_, np.text, np.root.ent_type_)
+
         # for each sentence in the current doc, tag the words
+        strings = []
         for sent in doc.sents:
             if sent.text.strip():
                 strings.append(' '.join(self.represent_word(w) for w in sent if not w.is_space))
