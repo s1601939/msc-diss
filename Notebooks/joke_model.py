@@ -39,16 +39,23 @@ LABELS = {
 }
 
 class JokeModel():
-    def __init__(self, joke_file = 'jokes.txt', noun_chunks = True, named_entities = True):
+    def __init__(self, 
+                 joke_file = 'jokes.txt', 
+                 noun_chunks = True, 
+                 named_entities = True,
+                 force_lower = True):
         self.joke_file = joke_file
         self.noun_chunks = noun_chunks
         self.named_entities = named_entities
+        self.force_lower = force_lower
         self.nlp = spacy.en.English()
 
     def raw_jokes(self):
         with open(self.joke_file) as f:
             for line in f:
                 line = line.strip()
+                if self.force_lower:
+                    line = line.lower()
                 yield(line)
 
     def tagged_jokes(self):
