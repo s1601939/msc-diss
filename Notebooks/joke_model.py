@@ -40,18 +40,18 @@ class JokeModel():
     def __init__(self, joke_file = 'jokes.txt'):
         self.joke_file = joke_file
 
-    def raw_jokes():
+    def raw_jokes(self):
         with open(self.joke_file) as f:
             for line in f:
                 line = line.strip()
                 yield(line)
 
-    def tagged_jokes():
+    def tagged_jokes(self):
         for doc in nlp.pipe(self.raw_jokes(), n_threads=4):
             yield(self.transform_doc(doc).strip())
 
 
-    def transform_doc(doc):
+    def transform_doc(self, doc):
         # label named entities
         for ent in doc.ents:
             ent.merge(ent.root.tag_, ent.text, LABELS[ent.label_])
@@ -70,7 +70,7 @@ class JokeModel():
         else:
             return ''
 
-    def represent_word(word):
+    def represent_word(self, word):
         if word.like_url:
             return '%%URL|X'
         text = re.sub(r'\s', '_', word.text)
@@ -79,7 +79,7 @@ class JokeModel():
             tag = '?'
         return text + '|' + tag
 
-    def load_jokes(fname='jokes.txt'):
+    def load_jokes(self, fname='jokes.txt'):
         with open(fname) as f:
             the_jokes = f.readlines()
 
