@@ -22,7 +22,7 @@ def load_stopwords(fname='stopwords.txt'):
     stopwords = ['a','to','and','of', 'are', 'she', 'i', 'you', 'is', "i'm", "i'd", 'but', 'so', 'on', 'the', 'me', 'my', 'into', 'be']
     return stopwords
 
-def load_stoppos(fname='stoppos.txt'):
+def load_stoptags(fname='stoppos.txt'):
     allpos = ['ADJ', 'ADP', 'ADV', 'AUX', 'CONJ', 'DET', 'INTJ', 'NOUN', 'NUM', 
             'PART PRON', 'PROPN', 'PUNCT', 'SCONJ', 'SYM', 'VERB', 'X', 'NORP', 
             'FACILITY', 'ORG', 'GPE', 'LOC', 'PRODUCT', 'EVENT', 'WORK_OF_ART', 'LANGUAGE']
@@ -37,7 +37,7 @@ def get_similarities(this_model, joke):
     min_sim = 1
     max_words = ()
     min_words = ()
-    joke_words = [word for word in joke.split() if word.lower() not in stopwords]
+    joke_words = [word for word in joke.split() if word.split('|')[0].lower() not in stopwords]
     pairs = list(itertools.combinations(joke_words,2))
     for (left_word,right_word) in pairs:
         if not (left_word == right_word):
@@ -66,7 +66,12 @@ elif model_choice == 's2v':
 else:
     raise NotImplementedError
 
+print("Load the jokes")
 jokes = JokeModel('jokes.txt')
+
+print("Load stopwords and stoptags")
+stopwords = load_stopwords
+stoptags = load_stoptags
 
 for joke in jokes.tagged_jokes():
     mns, mnw, mxs, mxw = get_similarities(model, joke)
