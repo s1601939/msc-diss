@@ -24,7 +24,7 @@ def load_stopwords(fname='stopwords.txt'):
 
 def load_stoptags(fname='stoppos.txt'):
     allpos = ['ADJ', 'ADP', 'ADV', 'AUX', 'CONJ', 'DET', 'INTJ', 'NOUN', 'NUM', 
-            'PART PRON', 'PROPN', 'PUNCT', 'SCONJ', 'SYM', 'VERB', 'X', 'NORP', 
+            'PART', 'PRON', 'PROPN', 'PUNCT', 'SCONJ', 'SYM', 'VERB', 'X', 'NORP', 
             'FACILITY', 'ORG', 'GPE', 'LOC', 'PRODUCT', 'EVENT', 'WORK_OF_ART', 'LANGUAGE']
     keeppos = ['ADJ', 'ADV', 'INTJ', 'NOUN',  
             'PROPN', 'SCONJ', 'SYM', 'VERB', 'X', 'NORP', 
