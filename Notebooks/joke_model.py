@@ -14,6 +14,8 @@ from spacy.tokens.doc import Doc
 
 from joblib import Parallel, delayed
 
+import sense2vec
+
 LABELS = {
     'ENT': 'ENT',
     'PERSON': 'ENT',
@@ -39,6 +41,7 @@ LABELS = {
 class JokeModel():
     def __init__(self, joke_file = 'jokes.txt'):
         self.joke_file = joke_file
+        self.nlp = spacy.en.English()
 
     def raw_jokes(self):
         with open(self.joke_file) as f:
@@ -47,7 +50,7 @@ class JokeModel():
                 yield(line)
 
     def tagged_jokes(self):
-        for doc in nlp.pipe(self.raw_jokes(), n_threads=4):
+        for doc in self.nlp.pipe(self.raw_jokes(), n_threads=4):
             yield(self.transform_doc(doc).strip())
 
 
