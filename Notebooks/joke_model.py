@@ -47,8 +47,8 @@ class JokeModel():
                 yield(line)
 
     def tagged_jokes():
-    for doc in nlp.pipe(self.raw_jokes(), n_threads=4):
-        yield(self.transform_doc(doc).strip())
+        for doc in nlp.pipe(self.raw_jokes(), n_threads=4):
+            yield(self.transform_doc(doc).strip())
 
 
     def transform_doc(doc):
