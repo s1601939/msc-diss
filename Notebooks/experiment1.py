@@ -8,7 +8,7 @@ import itertools
 from nltk.corpus import brown, movie_reviews, treebank, webtext, gutenberg
 import sense2vec
 from operator import itemgetter
-import simple_tagger
+from simple_tagger import *
 from language_models import Sense2VecModel, Word2VecModel
 
 model_choice = 's2v' #['w2v', 's2v']
