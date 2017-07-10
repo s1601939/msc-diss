@@ -75,13 +75,13 @@ else:
     raise NotImplementedError
 
 print("Load the jokes")
-jokes = JokeModel('jokes.txt')
+jokes = JokeModel('jokes.txt',named_entities=False)
 
 print("Load stopwords and stoptags")
 stop_words = load_stopwords()
 stop_tags = load_stoptags()
 
-for joke in jokes.tagged_jokes(named_entities=False):
+for joke in jokes.tagged_jokes():
     mns, mnw, mxs, mxw = get_similarities(model, joke)
     print(joke)
     print (mns, mnw, mxs, mxw)
