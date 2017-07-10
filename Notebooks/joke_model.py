@@ -78,3 +78,16 @@ class JokeModel()
         if not tag:
             tag = '?'
         return text + '|' + tag
+
+    def load_jokes(fname='jokes.txt'):
+        with open(fname) as f:
+            the_jokes = f.readlines()
+
+        # you may also want to remove whitespace characters like `\n` at the end of each line
+        the_jokes = [x.strip() for x in the_jokes] 
+
+        # deal with punctuation except apostrophes
+        punct = ''.join(c for c in string.punctuation if c not in "'")
+        the_jokes = [''.join(c for c in s if c not in punct) for s in the_jokes]
+        return the_jokes
+
