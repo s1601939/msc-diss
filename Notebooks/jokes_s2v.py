@@ -1,11 +1,5 @@
-
 # coding: utf-8
-
 # 2017-06-19
-# Read sentence
-# Word2Vec
-# With the sentence, calculate it's "Probability"
-# 
 
 import gensim
 import os
@@ -14,68 +8,13 @@ import itertools
 from nltk.corpus import brown, movie_reviews, treebank, webtext, gutenberg
 import sense2vec
 from operator import itemgetter
+import simple_tagger
+import language_models
 
-model_choice = 's2v' #['w2v_hierarchical_softmax', 'w2v_negative_sampling', 's2v']
-
-class Model:
-    def __init__(self, model_type):
-        self.model_type = model_type
-
-    def get_type(self):
-        return self.model_type
-
-    def similarity(self):
-        raise NotImplementedError
-
-    def format_word(self):
-        raise NotImplementedError
-
-
-class Sense2VecModel(Model):
-    def __init__(self, model_type='s2v'):
-        Model.__init__(self, model_type)
-        self.model = sense2vec.load()
-
-    def similarity(self, word1, word2):
-        print(word1)
-        f1,v1 = self.model[self.format_word(word1)]
-        print(word2)
-        f2,v2 = self.model[self.format_word(word2)]
-        return model.data.similarity(v1,v2)
-
-    def format_word(self, word):
-        # if no POS tag is present, find the most freqent version of the word.
-        this_word = word.split('|')
-        if len(this_word) == 1:
-            word = self.most_frequent_POS(this_word[0])
-        print(word)
-        return word
-
-    def most_frequent_POS(self, untagged_word):
-        # get all the known tags for untagged word
-        # select highest frequency version
-        # return the tagged version of the untagged_word
-        freq_list = sorted([(key,value[0]) for key, value in self.model.items() if key.lower().startswith(untagged_word+'|')], key=itemgetter(1), reverse=True)
-
-        return freq_list[0][0]
-
-
-
-class Word2VecModel(Model):
-    def __init__(self, name, model_type='hierarchical'):
-        Model.__init__(self, model_type)
-        if self.type == 'w2v_hierarchical_softmax':
-            self.model =  gensim.models.Word2Vec(brown.sents()+movie_reviews.sents()+treebank.sents()+webtext.sents()+gutenberg.sents(), hs=1, negative=0)
-        else:
-            self.model = gensim.models.Word2Vec(brown.sents()+movie_reviews.sents()+treebank.sents()+webtext.sents()+gutenberg.sents())
-
-    def similarity(self, word1, word2):
-        return model.similarity(format_word(word1), format_word(word2))
-
-    def format_word(self, word):
-        # if a POS tag is present, ignore it. force the word to lowercase
-        return word
-
+model_choice = 's2v' #['w2v', 's2v']
+# for language model operations we can "safely" assume that words are passed as
+# 'word|POS' and that Sense2VecModel and Word2VecModel will not break.
+# This may not be true of 'word', but I'm working on it.
 
 
 def load_jokes(fname='jokes.txt'):
@@ -178,25 +117,16 @@ def transform_texts(texts):
 
 print("Load the models")
 #model = gensim.models.KeyedVectors.load_word2vec_format(os.path.join(os.path.dirname(__file__), '../data/GoogleNews-vectors-negative300.bin'), binary=True)
-if model_choice == 'w2v_hierarchical_softmax':
-    print(">>Hierarchical Softmax version")
-    model = Word2VecModel(model_choice)
-elif model_choice == 'w2v_negative_sampling':
-    print(">>Negative sampling version")
+if model_choice == 'w2v':
+    print(">>word2vec - extended corpora")
     model = Word2VecModel(model_choice)
 elif model_choice == 's2v':
     print(">>sense2vec - reddit hivemind corpus")
-    model_s2v = Sense2VecModel(model_choice)
+    model = Sense2VecModel(model_choice)
 else:
     raise NotImplementedError
 
-print("Load the jokes")
-joke_text = load_jokes()
-
-print("Load the stop/oov words")
-stopwords = load_stopwords()
-
-for joke in joke_text:
-    mns, mnw, mxs, mxw = get_similarities(model_s2v, joke)
+for joke in pos_jokes('jokes.text'):
+    mns, mnw, mxs, mxw = get_similarities(model, joke)
     print(joke)
     print (mns, mnw, mxs, mxw)
