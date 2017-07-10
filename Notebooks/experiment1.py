@@ -72,8 +72,8 @@ print("Load the jokes")
 jokes = JokeModel('jokes.txt')
 
 print("Load stopwords and stoptags")
-stopwords = load_stopwords
-stoptags = load_stoptags
+stopwords = load_stopwords()
+stoptags = load_stoptags()
 
 for joke in jokes.tagged_jokes():
     mns, mnw, mxs, mxw = get_similarities(model, joke)
