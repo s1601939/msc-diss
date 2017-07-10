@@ -30,7 +30,7 @@ class Sense2VecModel(Model):
         f1,v1 = self.model[self.format_word(word1)]
         print(word2)
         f2,v2 = self.model[self.format_word(word2)]
-        return model.data.similarity(v1,v2)
+        return self.model.data.similarity(v1,v2)
 
     def format_word(self, word):
         # if no POS tag is present, find the most freqent version of the word.
