@@ -19,7 +19,13 @@ model_choice = 's2v' #['w2v', 's2v']
 
 
 def load_stopwords(fname='stopwords.txt'):
-    stopwords = ['a','to','and','of', 'are', 'she', 'i', 'you', 'is', "i'm", "i'd", 'but', 'so', 'on', 'the', 'me', 'my', 'into', 'be']
+    stopwords =  ['a','to','of', 'so', 'on', 'the', 'into']
+    stopwords += ['i', 'me', 'my', 'you', 'us', 'we', 'them', 'she', 'her', 'he', 'him']
+    stopwords += ['and', 'or', 'but']
+    stopwords += ['had', 'have', "'ve"]
+    stopwords += ['is', 'are', 'am', "'m", 'be']
+    stopwords += ["'s", "'d"]
+
     return stopwords
 
 def load_stoptags(fname='stoppos.txt'):
