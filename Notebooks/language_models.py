@@ -26,9 +26,7 @@ class Sense2VecModel(Model):
         self.model = sense2vec.load()
 
     def similarity(self, word1, word2):
-        print(word1)
         f1,v1 = self.model[self.format_word(word1)]
-        print(word2)
         f2,v2 = self.model[self.format_word(word2)]
         return self.model.data.similarity(v1,v2)
 

@@ -29,7 +29,7 @@ def load_stoptags(fname='stoppos.txt'):
     keeppos = ['ADJ', 'ADV', 'INTJ', 'NOUN',  
             'PROPN', 'SCONJ', 'SYM', 'VERB', 'X', 'NORP', 
             'FACILITY', 'ORG', 'GPE', 'LOC', 'PRODUCT', 'EVENT', 'WORK_OF_ART', 'LANGUAGE']
-    stoppos = allpos - stoppos
+    stoppos = list(set(allpos) - set(stoppos))
     return stoppos
 
 def get_similarities(this_model, joke):
@@ -38,7 +38,8 @@ def get_similarities(this_model, joke):
     max_words = ()
     min_words = ()
     # joke_words = [word for word in joke.split() if word.split('|')[0].lower() not in stopwords]
-    joke_words = joke.split()
+    joke_words = [w for w in j.split() if w.split('|')[1] not in stoptags]
+    joke_words = [w for w in j.split() if w.split('|')[0] not in stopwords]
     pairs = list(itertools.combinations(joke_words,2))
     for (left_word,right_word) in pairs:
         if not (left_word == right_word):
