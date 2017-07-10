@@ -29,7 +29,7 @@ def load_stoptags(fname='stoppos.txt'):
     keeppos = ['ADJ', 'ADV', 'INTJ', 'NOUN',  
             'PROPN', 'SCONJ', 'SYM', 'VERB', 'X', 'NORP', 
             'FACILITY', 'ORG', 'GPE', 'LOC', 'PRODUCT', 'EVENT', 'WORK_OF_ART', 'LANGUAGE']
-    stoppos = list(set(allpos) - set(stoppos))
+    stoppos = list(set(allpos) - set(keeppos))
     return stoppos
 
 def get_similarities(this_model, joke):
