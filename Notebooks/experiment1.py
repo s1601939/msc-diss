@@ -81,7 +81,7 @@ print("Load stopwords and stoptags")
 stop_words = load_stopwords()
 stop_tags = load_stoptags()
 
-for joke in jokes.tagged_jokes():
+for joke in jokes.tagged_jokes(named_entities=False):
     mns, mnw, mxs, mxw = get_similarities(model, joke)
     print(joke)
     print (mns, mnw, mxs, mxw)
