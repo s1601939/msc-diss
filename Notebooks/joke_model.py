@@ -36,7 +36,7 @@ LABELS = {
     'CARDINAL': 'CARDINAL'
 }
 
-class JokeModel()
+class JokeModel():
     def __init__(self, joke_file = 'jokes.txt'):
         self.joke_file = joke_file
 
