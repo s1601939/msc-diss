@@ -44,9 +44,14 @@ def get_similarities(this_model, joke):
     min_sim = 1
     max_words = ()
     min_words = ()
-    # joke_words = [word for word in joke.split() if word.split('|')[0].lower() not in stopwords]
+
+    # remove stopwords
     joke_words = [w for w in joke.split() if w.split('|')[0].lower() not in stop_words]
+    # remove unwanted tags
     joke_words = [w for w in joke_words if w.split('|')[1] not in stop_tags]
+    # remove OOV words
+    joke_words = [w for w in joke_words if this_model(w.split('|')[0])]
+    
     pairs = list(itertools.combinations(joke_words,2))
     for (left_word,right_word) in pairs:
         if not (left_word == right_word):

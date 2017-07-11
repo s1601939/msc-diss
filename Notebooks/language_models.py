@@ -19,6 +19,8 @@ class Model:
     def format_word(self):
         raise NotImplementedError
 
+    def in_vocab(self):
+        raise NotImplementedError
 
 class Sense2VecModel(Model):
     def __init__(self, model_type='s2v'):
@@ -42,13 +44,14 @@ class Sense2VecModel(Model):
         # select highest frequency version
         # return the tagged version of the untagged_word
         freq_list = sorted([(key,value[0]) for key, value in self.model.items() if key.lower().startswith(untagged_word+'|')], key=itemgetter(1), reverse=True)
-
         return freq_list[0][0]
 
+    def in_vocab(self, word):
+        return (word in model)
 
 
 class Word2VecModel(Model):
-    def __init__(self, name, model_type='w2v'):
+    def __init__(self, model_type='w2v'):
         Model.__init__(self, model_type)
         self.model_h = gensim.models.Word2Vec(brown.sents()+movie_reviews.sents()+treebank.sents()+webtext.sents()+gutenberg.sents(), hs=1, negative=0)
         self.model_n = gensim.models.Word2Vec(brown.sents()+movie_reviews.sents()+treebank.sents()+webtext.sents()+gutenberg.sents())
@@ -64,3 +67,6 @@ class Word2VecModel(Model):
     def format_word(self, word):
         # if a POS tag is present, ignore it. force the word to lowercase
         return word.split('|')[0].lower()
+
+    def in_vocab(self, word):
+        return (word in model_h)

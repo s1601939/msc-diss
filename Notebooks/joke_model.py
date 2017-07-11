@@ -1,4 +1,6 @@
-#merge_text.py
+#based on and adapted from 
+#spacy.io
+#FIX CITATION
 from __future__ import print_function, unicode_literals, division
 import io
 import bz2
@@ -38,11 +40,18 @@ LABELS = {
     'CARDINAL': 'CARDINAL'
 }
 
+CONTRACTIONS = {
+    "n't" : 'not',
+    "'ve" : 'have',
+    "'m" : 'am',
+    "'s" : 'is',
+}
+
 class JokeModel():
     def __init__(self, 
                  joke_file = 'jokes.txt', 
-                 noun_chunks = True, 
-                 named_entities = True,
+                 noun_chunks = False, 
+                 named_entities = False,
                  force_lower = True):
         self.joke_file = joke_file
         self.noun_chunks = noun_chunks
@@ -69,7 +78,7 @@ class JokeModel():
             for ent in doc.ents:
                 ent.merge(ent.root.tag_, ent.text, LABELS[ent.label_])
 
-        # compound noun phrases
+        # concatenate compound noun phrases
         if self.noun_chunks:
             for np in list(doc.noun_chunks):
                 while len(np) > 1 and np[0].dep_ not in ('advmod', 'amod', 'compound'):
@@ -93,7 +102,9 @@ class JokeModel():
         tag = LABELS.get(word.ent_type_, word.pos_)
         if not tag:
             tag = '?'
+        text = CONTRACTIONS.get(text, text)
         return text + '|' + tag
+
 
     def load_jokes(self, fname='jokes.txt'):
         with open(fname) as f:
