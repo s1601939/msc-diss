@@ -71,4 +71,4 @@ class Word2VecModel(Model):
         return word.split('|')[0].lower()
 
     def in_vocab(self, word):
-        return (self.format_word(word) in self.model_h)
+        return (self.format_word(word) in self.model_n)
