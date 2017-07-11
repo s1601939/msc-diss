@@ -54,9 +54,9 @@ class Word2VecModel(Model):
     def __init__(self, model_type='w2v'):
         Model.__init__(self, model_type)
 #        self.model_h = gensim.models.Word2Vec(brown.sents()+movie_reviews.sents()+treebank.sents()+webtext.sents()+gutenberg.sents(), hs=1, negative=0)
-#        self.model_n = gensim.models.Word2Vec(brown.sents()+movie_reviews.sents()+treebank.sents()+webtext.sents()+gutenberg.sents())
-        self.model_h = gensim.models.Word2Vec(webtext.sents(), hs=1, negative=0)
-        self.model_n = gensim.models.Word2Vec(webtext.sents())
+        self.model_n = gensim.models.Word2Vec(brown.sents()+movie_reviews.sents()+treebank.sents()+webtext.sents()+gutenberg.sents())
+#        self.model_h = gensim.models.Word2Vec(webtext.sents(), hs=1, negative=0)
+#        self.model_n = gensim.models.Word2Vec(webtext.sents())
 
     def similarity(self, word1, word2):
         return self.model_n.similarity(self.format_word(word1), self.format_word(word2))
