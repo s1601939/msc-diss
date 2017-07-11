@@ -47,7 +47,7 @@ class Sense2VecModel(Model):
         return freq_list[0][0]
 
     def in_vocab(self, word):
-        return (word in model)
+        return (word in self.model)
 
 
 class Word2VecModel(Model):
@@ -69,4 +69,4 @@ class Word2VecModel(Model):
         return word.split('|')[0].lower()
 
     def in_vocab(self, word):
-        return (word in model_h)
+        return (word in self.model_h)
