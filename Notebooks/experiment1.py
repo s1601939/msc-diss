@@ -12,7 +12,7 @@ from joke_model import JokeModel
 from language_models import Sense2VecModel, Word2VecModel
 from nltk.corpus import stopwords
 
-model_choice = 's2v' #['w2v', 's2v']
+model_choice = 'w2v' #['w2v', 's2v']
 # for language model operations we can "safely" assume that words are passed as
 # 'word|POS' and that Sense2VecModel and Word2VecModel will not break.
 # This may not be true of 'word', but I'm working on it.
