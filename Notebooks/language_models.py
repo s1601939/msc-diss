@@ -59,7 +59,7 @@ class Word2VecModel(Model):
         self.model_n = gensim.models.Word2Vec(webtext.sents())
 
     def similarity(self, word1, word2):
-        return model_n.similarity(format_word(word1), format_word(word2))
+        return self.model_n.similarity(format_word(word1), format_word(word2))
 
     def probability(self, sent):
         # use the model_h to calculate the probability?
