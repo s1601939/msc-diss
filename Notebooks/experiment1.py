@@ -50,8 +50,8 @@ def get_similarities(this_model, joke):
     # remove unwanted tags
     joke_words = [w for w in joke_words if w.split('|')[1] not in stop_tags]
     # remove OOV words
-    joke_words = [w for w in joke_words if this_model(w.split('|')[0])]
-    
+    joke_words = [w for w in joke_words if this_model.in_vocab(w.split('|')[0])]
+
     pairs = list(itertools.combinations(joke_words,2))
     for (left_word,right_word) in pairs:
         if not (left_word == right_word):
