@@ -106,13 +106,11 @@ def main(model_choice='s2v',joke_choice='jokes.txt'):
     results = [[j,None,None,[None]] for j in jokes.raw_jokes()]
     joke_id = 0
     for joke in jokes.tagged_jokes():
+        print(results[joke_id][0])
         mns, mnw, mxs, mxw, grid, pos_joke, pos_joke_words = get_similarities(model, joke)
         results[joke_id][1] = pos_joke
         results[joke_id][2] = pos_joke_words
         results[joke_id][3] = grid
-        if joke_id == 22:
-            print(results[joke_id])
-        joke_id += 1
 
     with open(model_choice+'_'+joke_choice+'.pkl','wb') as pkl_file:
         pickle.dump(results, pkl_file)
