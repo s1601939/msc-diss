@@ -13,9 +13,11 @@ from language_models import Sense2VecModel, Word2VecModel
 from nltk.corpus import stopwords
 import numpy as np
 import pandas as pd
+import pickle
+import plac
 
-
-model_choice = 'w2v' #['w2v', 's2v']
+# model_choice = 'w2v' #['w2v', 's2v']
+# joke_choice = 'jokes.txt'
 # for language model operations we can "safely" assume that words are passed as
 # 'word|POS' and that Sense2VecModel and Word2VecModel will not break.
 # This may not be true of 'word', but I'm working on it.
@@ -43,8 +45,8 @@ def load_stoptags(fname='stoppos.txt'):
     return stoppos
 
 def get_similarities(this_model, joke):
-    max_sim = -1
-    min_sim = 1
+    max_sim = -1.0
+    min_sim = 1.0
     max_words = ()
     min_words = ()
 
@@ -55,19 +57,15 @@ def get_similarities(this_model, joke):
     # remove OOV words
     joke_words = [w for w in joke_words if this_model.in_vocab(w)]
 
-    sim_grid_min = pd.DataFrame(index=joke_words, columns=joke_words)
-    sim_grid_min = sim_grid_min.fillna(1)
-
-    sim_grid_max = pd.DataFrame(index=joke_words, columns=joke_words)
-    sim_grid_max = sim_grid_max.fillna(-1)
+    sim_grid = pd.DataFrame(index=joke_words, columns=joke_words)
+    sim_grid = sim_grid.fillna(-1.0)
 
     pairs = list(itertools.combinations(joke_words,2))
     for (left_word,right_word) in pairs:
         if not (left_word == right_word):
             try:
                 this_sim = this_model.similarity(left_word, right_word)
-                sim_grid_min[left_word][right_word] = min(sim_grid_min[left_word][right_word], this_sim)
-                sim_grid_max[left_word][right_word] = max(sim_grid_max[left_word][right_word], this_sim)
+                sim_grid[left_word][right_word] = max(sim_grid[left_word][right_word], this_sim)
 
                 if this_sim < min_sim:
                     min_sim = this_sim
@@ -78,35 +76,48 @@ def get_similarities(this_model, joke):
             except:
                 # use this to build a stopword list
                 print("one of these words is not in vocab: {0}, {1}".format(left_word,right_word))
-    return [min_sim, min_words, max_sim, max_words, sim_grid_min, sim_grid_max, joke, joke_words]
+    return [min_sim, min_words, max_sim, max_words, sim_grid, joke, joke_words]
+
+@plac.annotations(
+    model_choice=("Which language model s2v or w2v [s2v]"),
+    joke_choice=("location of the joke or non-joke file [jokes.txt]")
+)
+def main(model_choice='s2v',joke_choice='jokes.txt'):
+    print("Load the model")
+    if model_choice == 'w2v':
+        print(">>word2vec - extended corpora")
+        model = Word2VecModel(model_choice)
+    elif model_choice == 's2v':
+        print(">>sense2vec - reddit hivemind corpus")
+        model = Sense2VecModel(model_choice)
+    else:
+        raise NotImplementedError
+
+    try:
+        print("Load the jokes")
+        jokes = JokeModel(joke_choice,named_entities=False)
+    except:
+        raise Exception('Could not load file "'+joke_choice+'"')
+
+    print("Load stopwords and stoptags")
+    stop_words = load_stopwords()
+    stop_tags = load_stoptags()
 
 
-print("Load the models")
-if model_choice == 'w2v':
-    print(">>word2vec - extended corpora")
-    model = Word2VecModel(model_choice)
-elif model_choice == 's2v':
-    print(">>sense2vec - reddit hivemind corpus")
-    model = Sense2VecModel(model_choice)
-else:
-    raise NotImplementedError
+    results = [[j,None,None,[None]] for j in jokes.raw_jokes()]
+    joke_id = 0
+    for joke in jokes.tagged_jokes():
+        mns, mnw, mxs, mxw, grid, pos_joke, pos_joke_words = get_similarities(model, joke)
+        results[joke_id][1] = pos_joke
+        results[joke_id][2] = pos_joke_words
+        results[joke_id][3] = grid
+        if joke_id == 22:
+            print(results[joke_id])
+        joke_id += 1
 
-print("Load the jokes")
-jokes = JokeModel('jokes.txt',named_entities=False)
+    with open(model_choice+'_'+joke_choice+'.pkl','wb') as pkl_file:
+        pickle.dump(results, pkl_file)
 
-print("Load stopwords and stoptags")
-stop_words = load_stopwords()
-stop_tags = load_stoptags()
-
-
-results = [[j,None,None,[None],[None]] for j in jokes.raw_jokes()]
-joke_id = 0
-for joke in jokes.tagged_jokes():
-    mns, mnw, mxs, mxw, grid_min, grid_max, pos_joke, pos_joke_words = get_similarities(model, joke)
-    results[joke_id][1] = pos_joke
-    results[joke_id][2] = pos_joke_words
-    results[joke_id][3] = grid_min
-    results[joke_id][4] = grid_max
-    if joke_id == 22:
-        print(results[joke_id])
-    joke_id += 1
+if __name__ == '__main__':
+    plac.call(main)
+    
