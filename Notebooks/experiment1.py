@@ -11,6 +11,9 @@ from operator import itemgetter
 from joke_model import JokeModel
 from language_models import Sense2VecModel, Word2VecModel
 from nltk.corpus import stopwords
+import numpy as np
+import pandas as pd
+
 
 model_choice = 'w2v' #['w2v', 's2v']
 # for language model operations we can "safely" assume that words are passed as
@@ -52,11 +55,20 @@ def get_similarities(this_model, joke):
     # remove OOV words
     joke_words = [w for w in joke_words if this_model.in_vocab(w)]
 
+    sim_grid_min = pd.DataFrame(index=joke_words, columns=joke_words)
+    sim_grid_min = sim_grid_min.fillna(1)
+
+    sim_grid_max = pd.DataFrame(index=joke_words, columns=joke_words)
+    sim_grid_max = sim_grid_max.fillna(-1)
+
     pairs = list(itertools.combinations(joke_words,2))
     for (left_word,right_word) in pairs:
         if not (left_word == right_word):
             try:
                 this_sim = this_model.similarity(left_word, right_word)
+                sim_grid_min[leftword][right_word] = min(sim_grid_min[leftword][right_word], this_sim)
+                sim_grid_max[leftword][right_word] = max(sim_grid_min[leftword][right_word], this_sim)
+
                 if this_sim < min_sim:
                     min_sim = this_sim
                     min_words = (left_word, right_word)
@@ -66,7 +78,7 @@ def get_similarities(this_model, joke):
             except:
                 # use this to build a stopword list
                 print("one of these words is not in vocab: {0}, {1}".format(left_word,right_word))
-    return [min_sim, min_words, max_sim, max_words]
+    return [min_sim, min_words, max_sim, max_words, sim_grid_min, sim_grid_max, joke, joke_words]
 
 
 print("Load the models")
@@ -86,7 +98,14 @@ print("Load stopwords and stoptags")
 stop_words = load_stopwords()
 stop_tags = load_stoptags()
 
+
+results = [[j for j in jokes.raw_jokes()],[None],[None],[None],[None]]
+joke_id = 0
 for joke in jokes.tagged_jokes():
-    mns, mnw, mxs, mxw = get_similarities(model, joke)
-    print(joke)
-    print (mns, mnw, mxs, mxw)
+    mns, mnw, mxs, mxw, grid_min, grid_max, pos_joke, pos_joke_words = get_similarities(model, joke)
+    results[joke_id][1] += [pos_joke]
+    results[joke_id][2] += [pos_joke_words]
+    results[joke_id][3] += [grid_min]
+    results[joke_id][4] += [grid_max]
+    if joke_id == 22:
+        print(results[joke_id])
