@@ -50,6 +50,9 @@ def get_similarities(this_model, joke):
     max_words = ()
     min_words = ()
 
+    stop_words = load_stopwords()
+    stop_tags = load_stoptags()
+
     # remove stopwords
     joke_words = [w for w in joke.split() if w.split('|')[0].lower() not in stop_words]
     # remove unwanted tags
@@ -99,10 +102,6 @@ def main(model_choice='s2v',joke_choice='jokes.txt'):
     except:
         raise Exception('Could not load file "'+joke_choice+'"')
 
-    print("Load stopwords and stoptags")
-    stop_words = load_stopwords()
-    stop_tags = load_stoptags()
-
 
     results = [[j,None,None,[None]] for j in jokes.raw_jokes()]
     joke_id = 0
@@ -120,4 +119,3 @@ def main(model_choice='s2v',joke_choice='jokes.txt'):
 
 if __name__ == '__main__':
     plac.call(main)
-    
