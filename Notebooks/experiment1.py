@@ -111,7 +111,8 @@ def main(model_choice='s2v',joke_choice='jokes.txt'):
         results[joke_id][1] = pos_joke
         results[joke_id][2] = pos_joke_words
         results[joke_id][3] = grid
-
+        joke_id += 1
+        
     with open(model_choice+'_'+joke_choice+'.pkl','wb') as pkl_file:
         pickle.dump(results, pkl_file)
 
