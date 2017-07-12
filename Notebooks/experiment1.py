@@ -66,8 +66,8 @@ def get_similarities(this_model, joke):
         if not (left_word == right_word):
             try:
                 this_sim = this_model.similarity(left_word, right_word)
-                sim_grid_min[leftword][right_word] = min(sim_grid_min[leftword][right_word], this_sim)
-                sim_grid_max[leftword][right_word] = max(sim_grid_min[leftword][right_word], this_sim)
+                sim_grid_min[left_word][right_word] = min(sim_grid_min[left_word][right_word], this_sim)
+                sim_grid_max[left_word][right_word] = max(sim_grid_max[left_word][right_word], this_sim)
 
                 if this_sim < min_sim:
                     min_sim = this_sim
@@ -99,13 +99,14 @@ stop_words = load_stopwords()
 stop_tags = load_stoptags()
 
 
-results = [[j for j in jokes.raw_jokes()],[None],[None],[None],[None]]
+results = [[j,None,None,[None],[None]] for j in jokes.raw_jokes()]
 joke_id = 0
 for joke in jokes.tagged_jokes():
     mns, mnw, mxs, mxw, grid_min, grid_max, pos_joke, pos_joke_words = get_similarities(model, joke)
-    results[joke_id][1] += [pos_joke]
-    results[joke_id][2] += [pos_joke_words]
-    results[joke_id][3] += [grid_min]
-    results[joke_id][4] += [grid_max]
+    results[joke_id][1] = pos_joke
+    results[joke_id][2] = pos_joke_words
+    results[joke_id][3] = grid_min
+    results[joke_id][4] = grid_max
     if joke_id == 22:
         print(results[joke_id])
+    joke_id += 1
