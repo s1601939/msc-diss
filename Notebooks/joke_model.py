@@ -45,6 +45,7 @@ CONTRACTIONS = {
     "'ve" : 'have',
     "'m" : 'am',
     "'s" : 'is',
+    "'d" : 'would'
 }
 
 class JokeModel():

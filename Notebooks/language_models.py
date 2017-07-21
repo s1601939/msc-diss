@@ -24,7 +24,7 @@ class Model:
         raise NotImplementedError
 
 class Sense2VecModel(Model):
-    def __init__(self, model_type='s2v'):
+    def __init__(self, model_type='s2v', model_size=None):
         Model.__init__(self, model_type)
         self.model = sense2vec.load()
         self.token_count = self.count_tokens()
@@ -49,13 +49,19 @@ class Sense2VecModel(Model):
         untagged_word = word.split('|')[0].lower()
         # select highest frequency version
         # return the tagged version of the untagged_word
-        freq_list = sorted(all_pos(untagged_word), key=itemgetter(1), reverse=True)
+        freq_list = sorted(all_pos_freq(untagged_word), key=itemgetter(1), reverse=True)
         return freq_list[0][0]
 
-    def all_pos(self, word):
+    def pos_list(self, word):
+        return list(set([w.split('|')[0].lower()+'|'+w.split('|')[1] for w,f in self.all_word_pos(word)]))
+
+    def all_word_pos(self, word):
         # get all the known tags for untagged word
         untagged_word = word.split('|')[0].lower()
         return [(key,value[0]) for key, value in self.model.items() if key.lower().startswith(untagged_word+'|')]
+
+    def all_pos_freq(self, word):
+        return [(p,sum([f for w,f in self.all_word_pos(word) if w.split('|')[0].lower()+'|'+w.split('|')[1] == p])) for p in self.pos_list(word)]
 
     def in_vocab(self, word):
         return (word in self.model)
@@ -64,7 +70,7 @@ class Sense2VecModel(Model):
         # requires sum of fequencies for full vocab
         if all_pos:
         # requires sum of frequencies for all_pos of a word
-            freq = sum([f for w,f in self.all_pos(word) if f])
+            freq = sum([f for w,f in self.all_pos_freq(word) if f])
         else:
         # requires frequency of word
             freq = self.model[word][0]
@@ -74,6 +80,13 @@ class Sense2VecModel(Model):
         return sum(np.log([self.probability(a) for a in tagged_string.split() if self.in_vocab(a)]))
 
     def entropy(self, tagged_string):
+        '''
+        this is intended to calculate the entropy of the string
+            entropy = -sum_i(prob(w_i)*log(prob(w_i)))
+
+        tagged_string: string
+                     : in the form "word1|POS word2|POS ..."
+        '''
         return -sum([self.probability(a) * np.log(self.probability(a)) for a in tagged_string.split() if self.in_vocab(a)])
 
 class Word2VecModel(Model):
@@ -100,10 +113,24 @@ class Word2VecModel(Model):
         return (self.format_word(word) in self.model_n)
 
     def probability(self, word):
-        # use the model_h to calculate the probability?
-        return self.model_h.probability(format_word(word))
+        # use the model_h.score to calculate the probability
+        return np.exp(self.score(format_word(word)))
 
     def score(self, tagged_string):
         untagged_string = ' '.join([self.format_word(w) for w in tagged_string.split() if self.in_vocab(self.format_word(w))])
         return self.model_h.score([untagged_string.split()])
 
+    def entropy(self, tagged_string):
+        '''
+        this is intended to calculate the entropy of the string
+            entropy = -sum_i(prob(w_i)*log(prob(w_i)))
+        the gensim documentation says score returns the log probability
+
+        tagged_string: string
+                     : in the form "word1|POS word2|POS ..."
+        '''
+        # for w in tagged_string.split():
+        #     log_probability = self.score(w)
+        #     word_entropy += -(np.exp(log_probability) * log_probability)
+        string_entropy = -sum([np.exp(self.score(w))*self.score(w) for w in tagged_string.split()])
+        return string_entropy[0]
