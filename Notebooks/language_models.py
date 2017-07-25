@@ -28,6 +28,7 @@ class Sense2VecModel(Model):
         Model.__init__(self, model_type)
         self.model = sense2vec.load()
         self.token_count = self.count_tokens()
+        self.pos_list_dict = {}
 
     def count_tokens(self):
         print("counting tokens")
@@ -53,7 +54,13 @@ class Sense2VecModel(Model):
         return freq_list[0][0]
 
     def pos_list(self, word):
-        return list(set([w.split('|')[0].lower()+'|'+w.split('|')[1] for w,f in self.all_word_pos(word)]))
+        try:
+            retval = self.pos_list_dict[word.split('|')[0].lower()]
+        except: 
+            retval = list(set([w.split('|')[0].lower()+'|'+w.split('|')[1] for w,f in self.all_word_pos(word)]))
+            self.pos_list_dict[word.split('|')[0].lower()] = retval
+        return retval
+#        return list(set([w.split('|')[0].lower()+'|'+w.split('|')[1] for w,f in self.all_word_pos(word)]))
 
     def all_word_pos(self, word):
         # get all the known tags for untagged word
