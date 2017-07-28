@@ -6,6 +6,7 @@ from nltk.corpus import brown, movie_reviews, treebank, webtext, gutenberg
 import sense2vec
 from operator import itemgetter
 import numpy as np
+import pickle
 
 class Model:
     def __init__(self, model_type):
@@ -27,8 +28,22 @@ class Sense2VecModel(Model):
     def __init__(self, model_type='s2v', model_size=None):
         Model.__init__(self, model_type)
         self.model = sense2vec.load()
+        self.model_size = model_size
         self.token_count = self.count_tokens()
         self.pos_list_dict = {}
+
+    def save(self):
+        # need to self_save the internal workings!
+        file_name = self.model_type + ('_' + self.model_size if self.model_size is not None else '') 
+        self.model.save(file_name) #requires a directory called file_name
+
+    def load(self):
+        # need to self_load the internal workings!
+        try:
+            file_name = self.model_type + ('_' + self.model_size if self.model_size is not None else '') 
+            self.model = sense2vec.load(file_name)
+        except:
+            self.model = None
 
     def count_tokens(self):
         print("counting tokens")
@@ -54,6 +69,7 @@ class Sense2VecModel(Model):
         return freq_list[0][0]
 
     def pos_list(self, word):
+        # returns the list of all the known POS versions of word (from model)
         try:
             retval = self.pos_list_dict[word.split('|')[0].lower()]
         except: 
@@ -99,6 +115,7 @@ class Sense2VecModel(Model):
 class Word2VecModel(Model):
     def __init__(self, model_type='w2v', model_size='full'):
         Model.__init__(self, model_type)
+        self.model_size = model_size
         if model_size == 'full':
             self.model_h = gensim.models.Word2Vec(brown.sents()+movie_reviews.sents()+treebank.sents()+webtext.sents()+gutenberg.sents(), hs=1, negative=0)
             self.model_n = gensim.models.Word2Vec(brown.sents()+movie_reviews.sents()+treebank.sents()+webtext.sents()+gutenberg.sents())
@@ -109,6 +126,22 @@ class Word2VecModel(Model):
             self.model_h = gensim.models.Word2Vec(treebank.sents(), hs=1, negative=0)
             self.model_n = gensim.models.Word2Vec(treebank.sents())
 
+    def save(self):
+        # need to self_save the internal workings!
+        file_name = self.model_type + ('_' + self.model_size if self.model_size is not None else '') 
+        self.model_h.save(file_name+'.modh')
+        self.model_n.save(file_name+'.modn')
+
+    def load(self):
+        # need to self_load the internal workings!
+        file_name = self.model_type + ('_' + self.model_size if self.model_size is not None else '') 
+        try:
+            self.model_h = gensim.models.Word2Vec.load(file_name+'.modh')
+            self.model_n = gensim.models.Word2Vec.load(file_name+'.modn')
+        except:
+            # this will throw all kinds of errors maybe this should rebuild?
+            self.model_h = self.model_n = None
+
     def similarity(self, word1, word2):
         return self.model_n.similarity(self.format_word(word1), self.format_word(word2))
 
@@ -118,6 +151,11 @@ class Word2VecModel(Model):
 
     def in_vocab(self, word):
         return (self.format_word(word) in self.model_n)
+
+    def pos_list(self, word):
+        # returns the list of all the known POS versions of word (from model)
+        # dumb function to return a single POS version of the word (for comaptability)
+        return [word.split('|')[0]+'|X']
 
     def probability(self, word):
         # use the model_h.score to calculate the probability
