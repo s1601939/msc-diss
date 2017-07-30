@@ -4,3 +4,6 @@ Notebooks/__pycache__/*
 Notebooks/Sense2Vec/*
 Notebooks/Sense2Vec*
 Notebooks/Word2Vec*
+dismissal_ES*
+*.pkl
+.ipynb_checkpoints/*
