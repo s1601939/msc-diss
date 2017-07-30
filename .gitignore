@@ -2,8 +2,7 @@ Stanford-parser-python-r22186.tar
 AISB_hackaton.zip
 Notebooks/__pycache__/*
 Notebooks/Sense2Vec/*
-Notebooks/Sense2Vec*
-Notebooks/Word2Vec*
+Sense2Vec*.pkl
+Word2Vec*.pkl
+Word2Vec*.mod*
 dismissal_ES*
-*.pkl
-.ipynb_checkpoints/*
