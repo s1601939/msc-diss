@@ -7,5 +7,5 @@ Word2Vec*.pkl
 Word2Vec*.mod*
 dismissal_ES*
 *.pyc
-
 Notebooks/.ipynb_checkpoints/exp_book-checkpoint.ipynb
+Notebooks/.ipynb_checkpoints/*.*
